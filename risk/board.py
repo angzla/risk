@@ -257,16 +257,16 @@ class Board(object):
         '''
         start = {}
         start[source] = [source]
-        q = heapdict.heapdict()
-        q[source] = 0
+        heap = heapdict.heapdict()
+        heap[source] = 0
         territory = set()
         territory.add(source)
 
         if self.owner(target) == self.owner(source):
             return None
-        while q:
-            current, w = q.peekitem()
-            q.pop(current)
+        while heap:
+            current, w = heap.peekitem()
+            heap.pop(current)
             if current == target:
                 return start[current]
             for x in list(risk.definitions.territory_neighbors[current]):
@@ -278,12 +278,12 @@ class Board(object):
                     new = copy.deepcopy(start[current])
                     new.append(x)
                     pathw = w + self.armies(x)
-                    if x not in q:
+                    if x not in heap:
                         start[x] = new
-                        q[x] = pathw
-                    elif q[x] > pathw:
+                        heap[x] = pathw
+                    elif heap[x] > pathw:
                         start[x] = new
-                        q[x] = pathw
+                        heap[x] = pathw
             territory.add(current)
         return None
 
